@@ -23,15 +23,20 @@ exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({ error: "Utilisateur Introuvable" });
+        return res
+          .status(401)
+          .json({ auth: false, error: "Utilisateur Introuvable" });
       }
       bcrypt
         .compare(req.body.password, user.password)
         .then((valid) => {
           if (!valid) {
-            return res.status(401).json({ error: "MDP Incorrect" });
+            return res
+              .status(401)
+              .json({ auth: false, error: "MDP Incorrect" });
           }
           res.status(200).json({
+            auth: true,
             userId: user._id,
             token: jwt.sign({ userId: user._id }, "TOKEN", {
               expiresIn: "24h",

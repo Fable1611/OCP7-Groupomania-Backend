@@ -6,6 +6,7 @@ const dotenv = require("dotenv").config();
 const path = require("path");
 
 const saucesRoutes = require("./routes/sauces");
+const blogsRoutes = require("./routes/blogs");
 const userRoutes = require("./routes/user");
 
 mongoose
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/sauces", saucesRoutes);
+app.use("/api/blogs", blogsRoutes);
 app.use("/api/auth", userRoutes);
 
 module.exports = app;
