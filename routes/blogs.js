@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
 
-const auth = require("../middleware/auth");
+//Appel des MiddleWare et des Controllers
 const blogsCtrl = require("../controllers/blogs");
+const multerConfiguration = require("../middleware/multer");
+const auth = require("../middleware/auth");
 
-router.post("/", blogsCtrl.createBlog);
+router.post("/", multerConfiguration, blogsCtrl.createBlog);
+router.put("/:id", multerConfiguration, blogsCtrl.modifyOneBlog);
+
 router.get("/", blogsCtrl.getAllBlogs);
 router.get("/:id", blogsCtrl.getOneBlog);
 router.delete("/:id", blogsCtrl.deleteOneBlog);
