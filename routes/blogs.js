@@ -9,11 +9,11 @@ const blogsCtrl = require("../controllers/blogs");
 const multerConfiguration = require("../middleware/multer");
 const auth = require("../middleware/auth");
 
-router.post("/", multerConfiguration, blogsCtrl.createBlog);
-router.put("/:id", multerConfiguration, blogsCtrl.modifyOneBlog);
+router.post("/", auth, multerConfiguration, blogsCtrl.createBlog);
+router.put("/:id", auth, multerConfiguration, blogsCtrl.modifyOneBlog);
 
-router.get("/", blogsCtrl.getAllBlogs);
-router.get("/:id", blogsCtrl.getOneBlog);
-router.delete("/:id", blogsCtrl.deleteOneBlog);
+router.get("/", auth, blogsCtrl.getAllBlogs);
+router.get("/:id", auth, blogsCtrl.getOneBlog);
+router.delete("/:id", auth, blogsCtrl.deleteOneBlog);
 
 module.exports = router;
