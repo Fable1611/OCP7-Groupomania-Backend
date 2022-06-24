@@ -56,3 +56,23 @@ exports.login = (req, res, next) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
+
+exports.authStatus = (req, res, next) => {
+  try {
+    const decodedToken = jwt.verify(
+      req.body.token,
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    const userId = decodedToken;
+    console.log(decodedToken);
+
+    if (req.body.userId && req.body.userId !== userId) {
+      throw "user Id non valable !";
+    } else {
+      console.log(req.body.token);
+      res.status(200).json(decodedToken.UserInfo);
+    }
+  } catch (error) {
+    res.status(401).json({ error: error | "requete non authentifie!" });
+  }
+};
