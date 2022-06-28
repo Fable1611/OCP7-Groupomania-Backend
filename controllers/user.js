@@ -41,7 +41,7 @@ exports.login = (req, res, next) => {
               { UserInfo: { userId: user._id, roles: user.role } },
               process.env.ACCESS_TOKEN_SECRET,
               {
-                expiresIn: "1d",
+                expiresIn: "2h",
               }
             );
 
@@ -63,16 +63,11 @@ exports.authStatus = (req, res, next) => {
       req.body.token,
       process.env.ACCESS_TOKEN_SECRET
     );
-    const userId = decodedToken;
+
     console.log(decodedToken);
 
-    if (req.body.userId && req.body.userId !== userId) {
-      throw "user Id non valable !";
-    } else {
-      console.log(req.body.token);
-      res.status(200).json(decodedToken.UserInfo);
-    }
+    res.status(200).json(decodedToken.UserInfo);
   } catch (error) {
-    res.status(401).json({ error: error | "requete non authentifie!" });
+    res.status(401).json({ error: "requete non authentifie!" });
   }
 };
