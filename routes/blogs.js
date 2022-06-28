@@ -11,6 +11,7 @@ const auth = require("../middleware/auth");
 
 router.post("/", auth, multerConfiguration, blogsCtrl.createBlog);
 router.put("/:id", auth, multerConfiguration, blogsCtrl.modifyOneBlog);
+router.post("/like", auth, blogsCtrl.likeBlog);
 
 router.get("/", auth, blogsCtrl.getAllBlogs);
 router.get("/:id", auth, blogsCtrl.getOneBlog);
