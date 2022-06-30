@@ -10,7 +10,7 @@ passwordSchema
   .is()
   .max(100) // Maximum length 100
   .has()
-  .uppercase() // Must have uppercase letters
+  .uppercase(1) // Must have uppercase letters
   .has()
   .lowercase() // Must have lowercase letters
   .has()
