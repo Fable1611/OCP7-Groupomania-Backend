@@ -3,6 +3,8 @@ const fs = require("fs");
 const Formdata = require("form-data");
 const jwt = require("jsonwebtoken");
 
+// ---------------------------------------Create One Blog---------------------------------- //
+
 exports.createBlog = (req, res, next) => {
   if (req.file) {
     const blog = new Blog({
@@ -40,6 +42,8 @@ exports.createBlog = (req, res, next) => {
     console.log(blog);
   }
 };
+
+// ---------------------------------------Modify One Blog---------------------------------- //
 
 exports.modifyOneBlog = (req, res, next) => {
   const reqID = req.body.id;
@@ -94,6 +98,8 @@ exports.modifyOneBlog = (req, res, next) => {
   });
 };
 
+// ---------------------------------------Get All Blogs---------------------------------- //
+
 exports.getAllBlogs = (req, res, next) => {
   Blog.find()
     .sort({ _id: -1 })
@@ -101,11 +107,15 @@ exports.getAllBlogs = (req, res, next) => {
     .catch((blogs) => res.status(400).json({ error }));
 };
 
+// ---------------------------------------Get One Blog---------------------------------- //
+
 exports.getOneBlog = (req, res, next) => {
   Blog.findOne({ _id: req.params.id })
     .then((blog) => res.status(200).json(blog))
     .catch((error) => res.status(400).json("objet non trouve"));
 };
+
+// ---------------------------------------Delete Blog---------------------------------- //
 
 exports.deleteOneBlog = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
@@ -155,12 +165,13 @@ exports.likeBlog = (req, res, next) => {
   let userIdReq = req.body.userId;
 
   console.log(likeValue, blogId, userIdReq);
-  if (likeValue === 1) {
-    Blog.findOne({ _id: blogId })
-      .then((blog) => {
-        likesTable = blog.userLiked;
-        console.log(likesTable);
 
+  Blog.findOne({ _id: blogId })
+    .then((blog) => {
+      likesTable = blog.userLiked;
+      console.log(likesTable);
+
+      if (likeValue === 1) {
         if (!likesTable.includes(userIdReq)) {
           console.log("User did not vote..");
           Blog.updateOne(
@@ -171,17 +182,13 @@ exports.likeBlog = (req, res, next) => {
             .catch((error) => res.status(400).json({ error }));
         } else {
           console.log("cet utilisateur a deja vote");
+          res.status(400).json({
+            message: "Cet utilisateur a deja like, pas de changement",
+          });
         }
-      })
-      .catch((error) => res.status(400).json({ error }));
-  }
+      }
 
-  if (likeValue === 0) {
-    Blog.findOne({ _id: blogId })
-      .then((blog) => {
-        likesTable = blog.userLiked;
-        console.log(likesTable);
-
+      if (likeValue === 0) {
         if (likesTable.includes(userIdReq)) {
           console.log("User already voted");
           Blog.updateOne(
@@ -192,8 +199,11 @@ exports.likeBlog = (req, res, next) => {
             .catch((error) => res.status(400).json({ error }));
         } else {
           console.log("User did not vote");
+          res.status(400).json({
+            message: "Cet utilisateur doit liker pour pouvoir enlever un like",
+          });
         }
-      })
-      .catch((error) => res.status(400).json({ error }));
-  }
+      }
+    })
+    .catch((error) => res.status(400).json({ error }));
 };
