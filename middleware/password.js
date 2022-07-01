@@ -1,3 +1,5 @@
+//Middleware qui valide que le mot de passe est suffisamment complexe
+
 const passwordValidator = require("password-validator");
 
 // Create a schema
