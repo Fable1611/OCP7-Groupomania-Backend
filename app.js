@@ -5,9 +5,11 @@ const dotenv = require("dotenv").config();
 
 const path = require("path");
 
+//Stockage des routes des Blogs et des User
 const blogsRoutes = require("./routes/blogs");
 const userRoutes = require("./routes/user");
 
+//Connexion à Mongoose, les données sensibles sont stockées dans une variable d'environnement pour plus de sécurité
 mongoose
   .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
@@ -33,6 +35,7 @@ app.use((req, res, next) => {
   next();
 });
 
+//Instructions sur l'utilisation des routes pour les images, les users et les blogs
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/blogs", blogsRoutes);
 app.use("/api/auth", userRoutes);

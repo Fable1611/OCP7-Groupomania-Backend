@@ -5,6 +5,8 @@ const { findOneAndUpdate } = require("../models/User");
 
 const User = require("../models/User");
 
+// ---------------------------------------Create New User---------------------------------- //
+//Utilisation de Bcrypt pour Hasher le password, enregistrement du User par la suite
 exports.signup = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 5)
@@ -22,7 +24,9 @@ exports.signup = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+// ---------------------------------------Login d'un User---------------------------------- //
 exports.login = (req, res, next) => {
+  //Utilisation de l'email contenu dans la Req pour trouver l'utilisateur
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
@@ -34,7 +38,7 @@ exports.login = (req, res, next) => {
           if (!valid) {
             return res.status(401).json({ error: "MDP Incorrect" });
           } else {
-            //CREATING JWTS
+            //Création de Token si l'utilisateur est le bon, valable 2h
             const accessToken = jwt.sign(
               { UserInfo: { userId: user._id, roles: user.role } },
               process.env.ACCESS_TOKEN_SECRET,
@@ -55,6 +59,8 @@ exports.login = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+// ---------------------------------------Login d'un User---------------------------------- //
+//Controller du status d'authentification des User, qui vérifie quand il y a un render de l'application si l'utilisateur est toujours authentifié (2h)
 exports.authStatus = (req, res, next) => {
   try {
     const decodedToken = jwt.verify(
