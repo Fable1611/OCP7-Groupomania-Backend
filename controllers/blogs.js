@@ -8,10 +8,12 @@ const jwt = require("jsonwebtoken");
 exports.createBlog = (req, res, next) => {
   //Vérification s'il y a un fichier ou non, puis création d'un objet en récupérant les éléments de la requête pour les envoyer par la suite à la BDD.
   if (req.file) {
+    console.log(req.body.alt);
     const blog = new Blog({
       title: req.body.title,
       userId: req.body.userId,
       body: req.body.body,
+      alt: req.body.alt,
       author: req.body.author,
       imageUrl: `${req.protocol}://${req.get("host")}/images/${
         req.file.filename
@@ -27,10 +29,13 @@ exports.createBlog = (req, res, next) => {
       .catch(() => res.status(400).json({ message: "Error !" }));
     console.log(blog);
   } else {
+    console.log(req.body.alt);
+
     const blog = new Blog({
       title: req.body.title,
       userId: req.body.userId,
       body: req.body.body,
+      alt: req.body.alt,
       author: req.body.author,
       likes: 0,
       usersLiked: [],
@@ -71,6 +76,7 @@ exports.modifyOneBlog = (req, res, next) => {
                 { _id: reqID },
                 {
                   body: req.body.body,
+                  alt: req.body.alt,
                   title: req.body.title,
                   author: req.body.author,
                   imageUrl: `${req.protocol}://${req.get("host")}/images/${
@@ -107,6 +113,7 @@ exports.modifyOneBlog = (req, res, next) => {
           { _id: reqID },
           {
             body: req.body.body,
+            alt: req.body.alt,
             title: req.body.title,
             author: req.body.author,
           }
