@@ -40,7 +40,7 @@ exports.login = (req, res, next) => {
           } else {
             //Création de Token si l'utilisateur est le bon, valable 2h
             const accessToken = jwt.sign(
-              { UserInfo: { userId: user._id, roles: user.role } },
+              { UserInfo: { userId: user._id, role: user.role } },
               process.env.ACCESS_TOKEN_SECRET,
               {
                 expiresIn: "2h",
