@@ -6,6 +6,7 @@ const blogSchema = mongoose.Schema({
   body: { type: String, required: true },
   author: { type: String, required: true },
   imageUrl: { type: String, required: false },
+  alt: { type: String, required: true },
   userLiked: [{ type: String, required: true }],
   likes: { type: Number, required: true },
 });
