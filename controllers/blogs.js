@@ -147,7 +147,7 @@ exports.deleteOneBlog = (req, res, next) => {
   const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
   const reqID = decodedToken.UserInfo.userId;
-  const userRole = decodedToken.UserInfo.roles;
+  const userRole = decodedToken.UserInfo.role;
 
   console.log(reqID, userRole);
 
